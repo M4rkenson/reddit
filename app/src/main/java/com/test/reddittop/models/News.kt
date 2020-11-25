@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 
 data class News (
-    @SerializedName("data")
+    @SerializedName("children")
     @Expose
-    val data: GlobalData? = null
+    val data: List<Child>? = null
 )

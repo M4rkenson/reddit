@@ -1,6 +1,8 @@
 package com.test.reddittop.viewmodels
 
 import androidx.lifecycle.*
+import com.test.reddittop.models.Child
+import com.test.reddittop.models.News
 import com.test.reddittop.network.ApiNews
 import com.test.reddittop.network.Event
 import com.test.reddittop.network.NetworkService
@@ -11,9 +13,9 @@ import kotlinx.coroutines.launch
 abstract class NewsViewModel : ViewModel() {
     var api: ApiNews = NetworkService.retrofitService()
 
-    fun <News> requestWithLiveData(
-        liveData: MutableLiveData<Event<List<News>>>,
-        request: suspend () -> List<News>
+    fun <GlobalData> requestWithLiveData(
+        liveData: MutableLiveData<Event<List<GlobalData>>>,
+        request: suspend () -> List<GlobalData>
     ) {
         liveData.postValue(Event.loading())
         this.viewModelScope.launch(Dispatchers.IO) {

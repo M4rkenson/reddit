@@ -12,13 +12,13 @@ import com.test.reddittop.viewmodels.ActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 import androidx.lifecycle.lifecycleScope
-import com.test.reddittop.models.Child
-import com.test.reddittop.models.News
+import com.test.reddittop.models.GlobalData
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityViewModel: ActivityViewModel
+    private var newsList:List<GlobalData> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         val recyclerViewAdapter = RecyclerViewAdapter(this)
         recyclerView.adapter = recyclerViewAdapter
-
+        recyclerViewAdapter.notifyDataSetChanged()
         activityViewModel = ViewModelProvider(this).get(ActivityViewModel::class.java)
         observeGetPosts()
     }
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     private fun viewOneLoading() {
     }
 
-    private fun viewOneSuccess(data: List<News>?) {
+    private fun viewOneSuccess(data: List<GlobalData>?) {
         println("success")
     }
 
