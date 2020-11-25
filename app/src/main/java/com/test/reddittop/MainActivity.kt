@@ -7,10 +7,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.test.reddittop.adapters.RecyclerViewAdapter
-import com.test.reddittop.models.News
 import com.test.reddittop.network.Status
 import com.test.reddittop.viewmodels.ActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+
+import androidx.lifecycle.lifecycleScope
+import com.test.reddittop.models.Child
+import com.test.reddittop.models.News
+import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var activityViewModel: ActivityViewModel
@@ -26,10 +31,14 @@ class MainActivity : AppCompatActivity() {
         activityViewModel = ViewModelProvider(this).get(ActivityViewModel::class.java)
         observeGetPosts()
     }
+
     override fun onResume() {
         super.onResume()
-        activityViewModel.getNews()
+        lifecycleScope.launch {
+            activityViewModel.getNews()
+        }
     }
+
     private fun observeGetPosts() {
         activityViewModel.simpleLiveData.observe(this, Observer {
             when (it.status) {
@@ -39,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
     private fun viewOneLoading() {
     }
 

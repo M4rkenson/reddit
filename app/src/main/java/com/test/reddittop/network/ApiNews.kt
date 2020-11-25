@@ -4,7 +4,7 @@ import com.test.reddittop.models.News
 import retrofit2.http.GET
 
 interface ApiNews {
-    @GET(" ")
-    suspend fun getNews(
+    @GET("top.json")
+    suspend fun getTopNews(
     ): List<News>
 }

@@ -1,30 +1,51 @@
 package com.test.reddittop.network
 
-import android.content.ContentValues.TAG
-import android.util.Log
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.Interceptor
+import okhttp3.Interceptor.Companion.invoke
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+
 
 object NetworkService {
+    private const val BASE_URL = "https://www.reddit.com/"
+
+    private val loggingInterceptor = run {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.apply {
+            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    private val baseInterceptor: Interceptor = invoke { chain ->
+        val newUrl = chain
+            .request()
+            .url
+            .newBuilder()
+            .build()
+
+        val request = chain
+            .request()
+            .newBuilder()
+            .url(newUrl)
+            .build()
+
+        return@invoke chain.proceed(request)
+    }
+
+    private val client: OkHttpClient = OkHttpClient
+        .Builder()
+        .addInterceptor(loggingInterceptor)
+        .addInterceptor(baseInterceptor)
+        .build()
+
     fun retrofitService():ApiNews {
-        val retrofit = Retrofit.Builder().baseUrl("http://www.reddit.com/").addConverterFactory(GsonConverterFactory.create()).build()
-        val service = retrofit.create(ClientService::class.java)
-        service?.getData("http://www.reddit.com/top.json")
-            ?.enqueue(object : Callback<Any> {
-                override fun onFailure(call: Call<Any>, t: Throwable) {
-
-                }
-
-                override fun onResponse(call: Call<Any>, response: Response<Any>) {
-                    Log.e(TAG, "" + Gson().toJson(response))
-                    if (response.isSuccessful) {
-                        println("Success")
-                    }
-
-                }
-            })}
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(ApiNews::class.java)
+    }
 }

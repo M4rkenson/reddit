@@ -7,9 +7,10 @@ import com.test.reddittop.network.Event
 class ActivityViewModel : NewsViewModel() {
     val simpleLiveData = MutableLiveData<Event<List<News>>>()
 
-    fun getNews() {
+    suspend fun getNews() {
         requestWithLiveData(simpleLiveData) {
-            api.getNews()
+            api.getTopNews()
         }
     }
 }
+

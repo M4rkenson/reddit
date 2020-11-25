@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 abstract class NewsViewModel : ViewModel() {
     var api: ApiNews = NetworkService.retrofitService()
 
-
     fun <News> requestWithLiveData(
         liveData: MutableLiveData<Event<List<News>>>,
         request: suspend () -> List<News>
@@ -20,6 +19,7 @@ abstract class NewsViewModel : ViewModel() {
         this.viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = request.invoke()
+
                 if (!response.isNullOrEmpty()) {
                     liveData.postValue(Event.success(response))
 

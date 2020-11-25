@@ -4,8 +4,8 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 
-data class News (
+data class Child (
     @SerializedName("data")
     @Expose
-    val data: GlobalData? = null
+    val childData: ChildData? = null
 )

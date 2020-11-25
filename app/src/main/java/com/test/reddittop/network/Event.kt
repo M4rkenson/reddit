@@ -16,9 +16,3 @@ data class Event<out T>(val status: Status, val data: T?, val error: Error?) {
         }
     }
 }
-
-enum class Status {
-    SUCCESS,
-    ERROR,
-    LOADING
-}
